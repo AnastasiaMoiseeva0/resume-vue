@@ -1,3 +1,3 @@
 <template>
-  <h2>Опыт работы</h2>
+  <h2>{{ $attrs.value }}</h2>
 </template>
