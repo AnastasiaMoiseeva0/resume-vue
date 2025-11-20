@@ -13,44 +13,40 @@
     <div class="form-control">
       <label for="value">Значение</label>
       <textarea id="value" v-model="value" rows="3"></textarea>
-      <small v-if="errors.value">{{ errors.value }}</small>
     </div>
 
-    <button class="btn primary" type="submit">Добавить</button>
+    <button class="btn primary" type="submit" :disabled="!isValid">Добавить</button>
   </form>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data () {
     return {
       type: 'title',
-      value: '',
-      errors: {
-        value: null
-      }
+      value: ''
+    }
+  },
+  computed: {
+    isValid () {
+      return this.value.length > 3
     }
   },
   methods: {
-    formIsValid () {
-      let isValid = true
+    async submitHandler () {
+      await axios.post(
+        'https://vue-resume-40fdf-default-rtdb.firebaseio.com/resume.json',
+        {
+          type: this.type,
+          value: this.value
+        }
+      )
+      this.value = ''
+      this.type = 'title'
 
-      if (this.value.length === 0) {
-        this.errors.value = 'Введите значение'
-        isValid = false
-      } else {
-        this.errors.value = null
-      }
-
-      return isValid
-    },
-    submitHandler () {
-      if (this.formIsValid()) {
-        console.group('Form data')
-        console.log('Type:', this.type)
-        console.log('Value:', this.value)
-        console.groupEnd()
-      }
+      this.$emit('getResume')
     }
   }
 }

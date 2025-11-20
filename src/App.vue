@@ -1,7 +1,7 @@
 <template>
   <div class="container column">
-    <resume-form></resume-form>
-    <resume-card></resume-card>
+    <resume-form @getResume="getResume"></resume-form>
+    <resume-card ref="resumeCard"></resume-card>
   </div>
   <div class="container">
     <resume-comments></resume-comments>
@@ -16,6 +16,11 @@ import ResumeForm from './components/ResumeForm.vue'
 import ResumeCard from './components/ResumeCard.vue'
 
 export default {
+  methods: {
+    getResume () {
+      this.$refs.resumeCard.loadResume()
+    }
+  },
   components: {
     AppLoader,
     ResumeComments,
