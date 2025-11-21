@@ -1,19 +1,26 @@
 <template>
-  <p>
-    <button class="btn primary">Загрузить комментарии</button>
-  </p>
-  <div class="card">
+  <div class="card" v-if="comments.length">
     <h2>Комментарии</h2>
-    <ul class="list">
+    <ul class="list" v-for="comment in comments" :key="comment.id">
       <li class="list-item">
         <div>
-          <p><strong>test@microsoft.com</strong></p>
+          <p><strong>{{comment.email}}</strong></p>
           <small
-            >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi,
-            reiciendis.</small
+            >{{comment.name}}</small
           >
         </div>
       </li>
     </ul>
   </div>
+  <p v-else>
+    <button class="btn primary" @click="$emit('load-comments')">Загрузить комментарии</button>
+  </p>
 </template>
+
+<script>
+
+export default {
+  emits: ['load-comments'],
+  props: ['comments']
+}
+</script>

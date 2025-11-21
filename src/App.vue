@@ -4,8 +4,11 @@
     <resume-card ref="resumeCard"></resume-card>
   </div>
   <div class="container">
-    <resume-comments></resume-comments>
-    <app-loader></app-loader>
+    <app-loader v-if="loading"></app-loader>
+    <resume-comments
+      :comments="comments"
+      @load-comments="getComments"
+    ></resume-comments>
   </div>
 </template>
 
@@ -14,11 +17,26 @@ import AppLoader from './components/AppLoader.vue'
 import ResumeComments from './components/ResumeComments.vue'
 import ResumeForm from './components/ResumeForm.vue'
 import ResumeCard from './components/ResumeCard.vue'
+import axios from 'axios'
 
 export default {
+  data () {
+    return {
+      comments: [],
+      loading: false
+    }
+  },
   methods: {
     getResume () {
       this.$refs.resumeCard.loadResume()
+    },
+    async getComments () {
+      this.loading = true
+      const res = await axios.get('https://jsonplaceholder.typicode.com/comments', {
+        params: { _limit: 42 }
+      })
+      this.comments = res.data
+      this.loading = false
     }
   },
   components: {
